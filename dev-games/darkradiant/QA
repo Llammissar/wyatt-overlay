@@ -1,0 +1,38 @@
+ * QA Notice: Package triggers severe warnings which indicate that it
+ *            may exhibit random runtime failures.
+ * ddslib.cpp:190:28: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * ddslib.cpp:409:53: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * ddslib.cpp:428:53: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * ddslib.cpp:509:53: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * ddslib.cpp:528:53: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_mdc.c:434:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_mdc.c:486:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_md3.c:162:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_md3.c:211:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * picomodel.c:1426:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * picomodel.c:1427:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * picomodel.c:1524:3: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_md2.c:318:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * pm_md2.c:362:2: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * compiler/Surface.cpp:1011:48: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * compiler/Surface.cpp:1021:22: warning: dereferencing type-punned pointer will break strict-aliasing rules
+ * compiler/Surface.cpp:1035:22: warning: dereferencing type-punned pointer will break strict-aliasing rules
+
+
+ * QA Notice: Package triggers severe warnings which indicate that it
+ *            may exhibit random runtime failures.
+ * compiler/ProcPatch.cpp:438:39: warning: array subscript is above array bounds
+ * compiler/ProcPatch.cpp:439:39: warning: array subscript is above array bounds
+ * compiler/ProcPatch.cpp:440:39: warning: array subscript is above array bounds
+ * compiler/ProcPatch.cpp:473:49: warning: array subscript is above array bounds
+
+
+ * QA Notice: Package triggers severe warnings which indicate that it
+ *            may exhibit random runtime failures.
+ * compiler/ProcFile.cpp:498:53: warning: left-hand operand of comma has no effect
+
+
+ * QA Notice: Package triggers severe warnings which indicate that it
+ *            may exhibit random runtime failures.
+ * compiler/OptIsland.cpp:19:17: warning: passing NULL to non-pointer argument 1 of ‘std::vector<_Tp, _Alloc>::vector(std::vector::size_type, const value_type&, const allocator_type&) [with _Tp = boost::shared_ptr<map::OptTri>, _Alloc = std::allocator<boost::shared_ptr<map::OptTri> >, std::vector::size_type = long unsigned int, value_type = boost::shared_ptr<map::OptTri>, allocator_type = std::allocator<boost::shared_ptr<map::OptTri> >]’
+

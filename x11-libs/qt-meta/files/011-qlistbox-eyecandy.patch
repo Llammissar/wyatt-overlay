@@ -1,0 +1,59 @@
+diff -purN qt-x11-free-3.3.4-orig/src/widgets/qlistbox.cpp qt-x11-free-3.3.4-pertty/src/widgets/qlistbox.cpp
+--- src/widgets/qlistbox.cpp	2005-01-21 11:16:22.000000000 -0600
++++ src/widgets/qlistbox.cpp	2005-03-11 14:56:27.727918392 -0600
+@@ -2167,7 +2167,7 @@ void QListBox::mouseReleaseEvent( QMouse
+     }
+ 
+     if ( d->rubber ) {
+-	drawRubber();
++	repaintContents( d->rubber->normalize(), FALSE );
+ 	delete d->rubber;
+ 	d->rubber = 0;
+ 	d->current = d->tmpCurrent;
+@@ -2245,11 +2245,9 @@ void QListBox::mouseMoveEvent( QMouseEve
+     }
+ 
+     if ( d->rubber ) {
+-	QRect r = d->rubber->normalize();
+-	drawRubber();
++    	QRect r = d->rubber->normalize();
+ 	d->rubber->setCoords( d->rubber->x(), d->rubber->y(), e->x(), e->y() );
+ 	doRubberSelection( r, d->rubber->normalize() );
+-	drawRubber();
+ 	return;
+     }
+ 
+@@ -4394,6 +4392,7 @@ void QListBox::drawRubber()
+ 	return;
+     if ( !d->rubber->width() && !d->rubber->height() )
+ 	return;
++ 
+     QPainter p( viewport() );
+     p.setRasterOp( NotROP );
+     style().drawPrimitive( QStyle::PE_RubberBand, &p, d->rubber->normalize(),
+@@ -4426,13 +4425,24 @@ void QListBox::doRubberSelection( const 
+ 	    }
+ 	}
+     }
++
++    QRect allRect = old;
++    if ( changed ) {
++        allRect |= pr;
++    }    
++    allRect |= rubber;
++    allRect &= viewport()->rect();
++    allRect.addCoords( -2, -2, 2, 2 );
++
++    repaintContents( QRect( contentsX() + allRect.left(), contentsY() + allRect.top(), allRect.width(), allRect.height() ), FALSE ); 
++    drawRubber();
++    
+     if ( changed ) {
+ 	emit selectionChanged();
+ #if defined(QT_ACCESSIBILITY_SUPPORT)
+ 	QAccessible::updateAccessibility( viewport(), 0, QAccessible::Selection );
+ #endif
+     }
+-    viewport()->repaint( pr, TRUE );
+ }
+ 
+ 

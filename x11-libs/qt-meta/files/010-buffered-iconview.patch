@@ -1,0 +1,94 @@
+--- src/iconview/qiconview.cpp.orig	2007-08-14 03:04:40.000000000 +0200
++++ src/iconview/qiconview.cpp	2007-08-14 03:08:25.000000000 +0200
+@@ -214,6 +214,7 @@
+     QIconViewItem *currentItem, *tmpCurrentItem, *highlightedItem,
+ 	*startDragItem, *pressedItem, *selectAnchor, *renamingItem;
+     QRect *rubber;
++    QPixmap *backBuffer;
+     QTimer *scrollTimer, *adjustTimer, *updateTimer, *inputTimer,
+ 	*fullRedrawTimer;
+     int rastX, rastY, spacing;
+@@ -2790,6 +2791,7 @@
+     d->highlightedItem = 0;
+     d->rubber = 0;
+     d->canStartRubber = FALSE;
++    d->backBuffer = 0;
+     d->scrollTimer = 0;
+     d->startDragItem = 0;
+     d->tmpCurrentItem = 0;
+@@ -2942,6 +2944,8 @@
+ 	delete item;
+ 	item = tmp;
+     }
++    delete d->backBuffer;
++    d->backBuffer = 0;
+     delete d->fm;
+     d->fm = 0;
+ #ifndef QT_NO_TOOLTIP
+@@ -4943,6 +4947,47 @@
+ #endif
+ 
+ /*!
++    This function grabs all paintevents that otherwise would have been
++    processed by the QScrollView::viewportPaintEvent(). Here we use a
++    doublebuffer to reduce 'on-paint' flickering on QIconView
++    (and of course its childs).
++    
++    \sa QScrollView::viewportPaintEvent(), QIconView::drawContents()
++*/
++
++void QIconView::bufferedPaintEvent( QPaintEvent* pe )
++{
++    QWidget* vp = viewport();
++    QRect r = pe->rect() & vp->rect();
++    int ex = r.x() + contentsX();
++    int ey = r.y() + contentsY();
++    int ew = r.width();
++    int eh = r.height();
++
++    if ( !d->backBuffer )
++	d->backBuffer = new QPixmap(vp->size());
++    if ( d->backBuffer->size() != vp->size() ) {
++	//Resize function (with hysteesis). Uses a good compromise between memory
++	//consumption and speed (number) of resizes.
++	float newWidth = (float)vp->width();
++	float newHeight = (float)vp->height();
++	if ( newWidth > d->backBuffer->width() || newHeight > d->backBuffer->height() )
++	{
++	    newWidth *= 1.1892;
++	    newHeight *= 1.1892;
++	    d->backBuffer->resize( (int)newWidth, (int)newHeight );
++	} else if ( 1.5*newWidth < d->backBuffer->width() || 1.5*newHeight < d->backBuffer->height() )
++	    d->backBuffer->resize( (int)newWidth, (int)newHeight );
++    }
++
++    QPainter p;
++    p.begin(d->backBuffer, vp);
++    drawContentsOffset(&p, contentsX(), contentsY(), ex, ey, ew, eh);
++    p.end();
++    bitBlt(vp, r.x(), r.y(), d->backBuffer, r.x(), r.y(), ew, eh);
++}
++
++/*!
+     \reimp
+ */
+ 
+@@ -5726,7 +5772,7 @@
+ 		    if ( !d->rubber )
+ 			drawDragShapes( d->oldDragPos );
+ 		}
+-		viewportPaintEvent( (QPaintEvent*)e );
++		bufferedPaintEvent( (QPaintEvent*)e );
+ 		if ( d->dragging ) {
+ 		    if ( !d->rubber )
+ 			drawDragShapes( d->oldDragPos );
+--- src/iconview/qiconview.h.orig	2007-08-14 03:08:46.000000000 +0200
++++ src/iconview/qiconview.h	2007-08-14 03:09:35.000000000 +0200
+@@ -452,6 +452,7 @@
+     void contentsDropEvent( QDropEvent *e );
+ #endif
+ 
++    void bufferedPaintEvent( QPaintEvent* );
+     void resizeEvent( QResizeEvent* e );
+     void keyPressEvent( QKeyEvent *e );
+     void focusInEvent( QFocusEvent *e );

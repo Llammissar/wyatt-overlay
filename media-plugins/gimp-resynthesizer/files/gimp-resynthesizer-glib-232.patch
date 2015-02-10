@@ -1,0 +1,24 @@
+--- a/src/refinerThreaded.h
++++ b/src/refinerThreaded.h
+@@ -316,7 +316,7 @@ refiner(
+   }
+ 
+ 
+-  g_thread_init(NULL);  // Init threading system, not necessary after glib 2.32
++//  g_thread_init(NULL);  // Init threading system, not necessary after glib 2.32
+ 
+   prepare_repetition_parameters(repetition_params, targetPoints->len);
+   estimatedPixelCountToCompletion = estimatePixelsToSynth(repetition_params);
+diff --git a/src/resynthesizer.c b/src/resynthesizer.c
+index 6212713..14579e5 100644
+--- a/src/resynthesizer.c
++++ b/src/resynthesizer.c
+@@ -311,7 +311,7 @@ static void run(
+   #ifdef SYNTH_THREADED
+   // This is as early as it can be called.  Not sure it needs to be called.  See later call to it.
+   // Call it early since calls to gdk, gtk might require this?
+-  g_thread_init(NULL);
++  //g_thread_init(NULL);
+   #endif
+ 
+   #ifdef DEBUG

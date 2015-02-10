@@ -1,0 +1,13 @@
+--- configure.orig	2008-05-31 22:10:28.000000000 +0200
++++ configure	2008-05-31 22:23:49.000000000 +0200
+@@ -114,8 +114,8 @@
+ 	    ;;
+ 	*)
+ 	    echo "invalid argument: $arg"
+-	    echo "try ./configure --help"
+-	    exit 1
++	    # echo "try ./configure --help"
++	    # exit 1
+ 	    ;;
+ 	esac
+ done
