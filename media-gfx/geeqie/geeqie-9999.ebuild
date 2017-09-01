@@ -7,7 +7,7 @@ inherit autotools base eutils git-2
 
 DESCRIPTION="A lightweight GTK image viewer forked from GQview"
 HOMEPAGE="http://geeqie.sourceforge.net/"
-EGIT_REPO_URI="git://gitorious.org/geeqie/geeqie.git"
+EGIT_REPO_URI="https://github.com/BestImageViewer/geeqie.git"
 
 LICENSE="GPL-2"
 SLOT="0"
